@@ -7,10 +7,10 @@ import java.util.ArrayList;
  */
 public class Node
 {
-    char data;
-    ArrayList<Node> neighbors;
-    boolean visited = false;
-    Node cameFrom;
+    private char data;
+    private ArrayList<Node> neighbors;
+    private boolean visited = false;
+    private Node cameFrom;
 
     public Node(char _data)
     {

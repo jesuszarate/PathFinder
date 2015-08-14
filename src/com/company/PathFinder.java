@@ -28,21 +28,53 @@ public class PathFinder
         boolean foundGoal = false;
         while (!pf.queue.isEmpty())
         {
-            if(pf.queue.peek().equals(pf.goal))
+            Node current = pf.queue.remove();
+            if (current.equals(pf.goal))
             {
                 foundGoal = true;
+                break;
             }
-            else {
-                Node current = pf.queue.poll();
-
-                for(Node neighborNode : current.getNeighbors())
+            else
+            {
+                for (Node neighborNode : current.getNeighbors())
                 {
-                    neighborNode.setCameFrom(current);
-                    neighborNode.setVisited(true);
-                    pf.queue.add(neighborNode);
+                    if(neighborNode !=  null && !neighborNode.isVisited())
+                    {
+                        neighborNode.setCameFrom(current);
+                        neighborNode.setVisited(true);
+                        pf.queue.add(neighborNode);
+                    }
                 }
             }
         }
+
+        if (foundGoal){
+            Node current = pf.goal.getCameFrom();
+            while (!current.equals(pf.start))
+            {
+                current.setData('.');
+                current = current.getCameFrom();
+            }
+        }
+
+        // write the resulting maze to the output file. If no path was
+        // found the output file will be the same as input file.
+        try
+        {
+            PrintWriter output = new PrintWriter (new FileWriter(outputFile));
+            output.println(pf.height + " " + pf.width);
+            for(int i = 0; i < pf.height; i++, output.print('\n'))
+                for(int j = 0; j < pf.width; j++){
+                    if(pf.maze[i][j] == null)
+                        output.print('X');
+                    else
+                        output.print(pf.maze[i][j].getData());
+                }
+            output.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -85,7 +117,7 @@ public class PathFinder
                             break;
                         case 'G':
                             maze[row][col] = new Node(current);
-                            start = maze[row][col];
+                            goal = maze[row][col];
                             break;
                         case ' ':
                             maze[row][col] = new Node(current);
