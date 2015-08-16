@@ -24,18 +24,18 @@ public class PathFinder
 
         pf.queue = new LinkedList<Node>();
         pf.queue.add(pf.start);
+        pf.start.setVisited(true);
 
         boolean foundGoal = false;
         while (!pf.queue.isEmpty())
         {
             Node current = pf.queue.remove();
-            if (current.equals(pf.goal))
+            if (current.getData() == 'G' && current.equals(pf.goal))
             {
                 foundGoal = true;
                 break;
             }
-            else
-            {
+
                 for (Node neighborNode : current.getNeighbors())
                 {
                     if(neighborNode !=  null && !neighborNode.isVisited())
@@ -45,7 +45,7 @@ public class PathFinder
                         pf.queue.add(neighborNode);
                     }
                 }
-            }
+
         }
 
         if (foundGoal){
@@ -127,7 +127,7 @@ public class PathFinder
             }
 
             for(int row = 0; row < height; row++)
-                for(int col = 0; col < height; col++)
+                for(int col = 0; col < width; col++)
                 {
                     if(maze[row][col] != null)
                         addNeighbors(maze, row, col);
